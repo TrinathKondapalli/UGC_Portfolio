@@ -8,12 +8,78 @@ const prefersReducedMotion = () =>
 const isTouch = () => window.matchMedia('(hover: none)').matches;
 
 export function initMotion() {
-  heroSequence();
-  if (prefersReducedMotion()) return;
-  fanPointerTilt();
-  stepLineScrub();
-  aanyaReveal();
-  magneticCta();
+  const preloader = document.getElementById('preloader');
+
+  if (prefersReducedMotion()) {
+    if (preloader) preloader.style.display = 'none';
+    heroSequence();
+    return;
+  }
+
+  const runScrollAnimations = () => {
+    fanPointerTilt();
+    stepLineScrub();
+    aanyaReveal();
+    magneticCta();
+  };
+
+  if (preloader) {
+    preloaderSequence(() => {
+      heroSequence();
+      runScrollAnimations();
+    });
+  } else {
+    heroSequence();
+    runScrollAnimations();
+  }
+}
+
+function preloaderSequence(onComplete: () => void) {
+  const preloader = document.getElementById('preloader');
+  const counter = document.getElementById('preloader-counter');
+  const bar = document.getElementById('preloader-bar-fill');
+  const brand = preloader?.querySelector('.preloader-brand');
+  
+  if (!preloader || !counter || !bar || !brand) return onComplete();
+
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      document.body.style.overflow = '';
+      gsap.set(preloader, { display: 'none' });
+      onComplete();
+    },
+  });
+
+  tl.to(brand, {
+    yPercent: 0,
+    duration: 1,
+    ease: 'power3.out',
+  });
+
+  const progress = { val: 0 };
+  tl.to(progress, {
+    val: 100,
+    duration: 2,
+    ease: 'power2.inOut',
+    onUpdate: () => {
+      counter.innerText = Math.round(progress.val) + '%';
+    },
+  }, "<0.2");
+
+  tl.to(bar, {
+    scaleX: 1,
+    duration: 2,
+    ease: 'power2.inOut',
+  }, "<");
+
+  tl.to(preloader, {
+    yPercent: -100,
+    duration: 0.9,
+    ease: 'power4.inOut',
+  }, "+=0.3");
 }
 
 function heroSequence() {
