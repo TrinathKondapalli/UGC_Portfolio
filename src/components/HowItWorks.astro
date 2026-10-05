@@ -25,15 +25,16 @@ const steps = [
       <p class="sub">One product, one clear idea, one ad that leads with the product.</p>
     </div>
 
-    <div class="steps" id="steps-track">
-      <div class="steps-line-rail" aria-hidden="true">
-        <div class="steps-line-fill" id="steps-line-fill"></div>
-      </div>
+    <div class="steps-stack" id="steps-stack">
       {steps.map((step, i) => (
-        <div class="step">
-          <span class="step-number" data-step-number>{i + 1}</span>
-          <h3 class="step-title">{step.title}</h3>
-          <p class="step-body">{step.body}</p>
+        <div class="step-card" style={`top: calc(15vh + ${i * 60}px); z-index: ${i};`}>
+          <div class="step-card-inner">
+            <span class="step-number">0{i + 1}</span>
+            <div class="step-content">
+              <h3 class="step-title">{step.title}</h3>
+              <p class="step-body">{step.body}</p>
+            </div>
+          </div>
         </div>
       ))}
     </div>
@@ -50,88 +51,72 @@ const steps = [
   .how .heading, .step-title { color: var(--ink); }
   .how .sub { color: var(--smoke); }
 
-  .steps {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--sp-6);
-  }
-  @media (min-width: 900px) {
-    .steps {
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--sp-4);
-    }
+  .steps-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 40vh;
+    padding-bottom: 20vh;
+    margin-top: var(--sp-6);
   }
 
-  .steps-line-rail {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.1);
-    top: 22px;
-    left: 22px;
-    width: 2px;
-    height: calc(100% - 44px);
-  }
-  @media (min-width: 900px) {
-    .steps-line-rail {
-      top: 22px;
-      left: calc(12.5% + 0px);
-      right: calc(12.5% + 0px);
-      width: auto;
-      height: 2px;
-    }
-  }
-
-  .steps-line-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: var(--ink);
+  .step-card {
+    position: sticky;
     width: 100%;
-    height: 100%;
-    transform-origin: top left;
-  }
-  @media (min-width: 900px) {
-    .steps-line-fill { transform-origin: left top; }
+    transform-origin: top center;
+    will-change: transform;
   }
 
-  .step {
-    position: relative;
-    padding-left: var(--sp-6);
+  .step-card-inner {
+    background: var(--ink);
+    border-radius: var(--radius-poster);
+    padding: var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    color: var(--chalk);
+    min-height: 300px;
+    justify-content: center;
+    border: 1px solid var(--line);
   }
   @media (min-width: 900px) {
-    .step { padding-left: 0; }
+    .step-card-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--sp-6) var(--sp-7);
+    }
   }
 
   .step-number {
-    position: absolute;
-    left: 0;
-    top: -4px;
     font-family: var(--font-display);
-    font-size: 2.5rem;
+    font-size: clamp(4rem, 10vw, 8rem);
     font-weight: 800;
     color: var(--smoke);
     line-height: 1;
+    opacity: 0.2;
+  }
+
+  .step-content {
+    flex: 1;
+    max-width: 500px;
   }
   @media (min-width: 900px) {
-    .step-number {
-      position: static;
-      display: block;
-      margin-bottom: var(--sp-3);
-    }
+    .step-content { margin-left: var(--sp-7); }
   }
 
   .step-title {
-    font-size: var(--text-card);
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    margin-bottom: var(--sp-1);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-3);
+    color: var(--chalk);
   }
 
   .step-body {
-    color: var(--ink);
-    font-size: var(--text-body);
-    line-height: 1.6;
-    max-width: 32ch;
+    color: rgba(242, 240, 234, 0.7);
+    font-size: var(--text-card);
+    line-height: 1.5;
   }
 </style>

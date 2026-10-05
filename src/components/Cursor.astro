@@ -1,0 +1,29 @@
+---
+---
+<div class="custom-cursor" id="custom-cursor" aria-hidden="true"></div>
+
+<style>
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--rec);
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    will-change: transform, width, height, background-color;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s;
+    mix-blend-mode: difference;
+  }
+  .custom-cursor.hover {
+    width: 60px;
+    height: 60px;
+    background-color: var(--chalk);
+  }
+  @media (hover: none) {
+    .custom-cursor { display: none; }
+  }
+</style>

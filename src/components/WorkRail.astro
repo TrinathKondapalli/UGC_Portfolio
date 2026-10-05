@@ -73,16 +73,22 @@ const needsFiller = items.length < 5;
 
   .rail {
     display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
     gap: var(--sp-3);
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scroll-padding-left: var(--side-padding);
-    padding-bottom: var(--sp-2);
-    cursor: grab;
-    scrollbar-width: none;
+    padding-left: var(--side-padding);
+    padding-right: var(--side-padding);
+    will-change: transform;
   }
-  .rail::-webkit-scrollbar { display: none; }
-  .rail.dragging { cursor: grabbing; scroll-snap-type: none; }
+  @media (hover: none) {
+    .rail {
+      width: auto;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+    }
+    .rail::-webkit-scrollbar { display: none; }
+  }
 
   .rail-arrow {
     display: none;
@@ -143,91 +149,4 @@ const needsFiller = items.length < 5;
 <script>
   import { initReelVideos } from '../scripts/video';
   initReelVideos(document);
-
-  const rail = document.getElementById('work-rail') as HTMLElement | null;
-  const prevBtn = document.getElementById('rail-prev');
-  const nextBtn = document.getElementById('rail-next');
-
-  if (rail) {
-    const cardWidth = () => (rail.querySelector('li')?.clientWidth ?? 250) + 24;
-
-    prevBtn?.addEventListener('click', () => {
-      rail.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
-    });
-    nextBtn?.addEventListener('click', () => {
-      rail.scrollBy({ left: cardWidth(), behavior: 'smooth' });
-    });
-
-    rail.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') {
-        rail.scrollBy({ left: cardWidth(), behavior: 'smooth' });
-      } else if (e.key === 'ArrowLeft') {
-        rail.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
-      }
-    });
-
-    let isDown = false;
-    let startX = 0;
-    let scrollStart = 0;
-    let velocity = 0;
-    let lastX = 0;
-    let lastTime = 0;
-    let momentumId = 0;
-    let dragDistance = 0;
-
-    const pointerDown = (e: PointerEvent) => {
-      if (e.pointerType === 'touch') return;
-      isDown = true;
-      dragDistance = 0;
-      rail.classList.add('dragging');
-      startX = e.clientX;
-      scrollStart = rail.scrollLeft;
-      lastX = e.clientX;
-      lastTime = performance.now();
-      velocity = 0;
-      cancelAnimationFrame(momentumId);
-      rail.setPointerCapture(e.pointerId);
-    };
-
-    const pointerMove = (e: PointerEvent) => {
-      if (!isDown) return;
-      const dx = e.clientX - startX;
-      dragDistance = Math.max(dragDistance, Math.abs(dx));
-      rail.scrollLeft = scrollStart - dx;
-      const now = performance.now();
-      const dt = now - lastTime || 16;
-      velocity = (e.clientX - lastX) / dt;
-      lastX = e.clientX;
-      lastTime = now;
-    };
-
-    const pointerUp = () => {
-      if (!isDown) return;
-      isDown = false;
-      rail.classList.remove('dragging');
-      let v = velocity * -16;
-      const step = () => {
-        if (Math.abs(v) < 0.5) return;
-        rail.scrollLeft += v;
-        v *= 0.95;
-        momentumId = requestAnimationFrame(step);
-      };
-      step();
-    };
-
-    rail.addEventListener('pointerdown', pointerDown);
-    rail.addEventListener('pointermove', pointerMove);
-    rail.addEventListener('pointerup', pointerUp);
-    rail.addEventListener('pointerleave', pointerUp);
-    rail.addEventListener(
-      'click',
-      (e) => {
-        if (dragDistance > 6) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      },
-      true
-    );
-  }
 </script>

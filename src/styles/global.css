@@ -183,3 +183,9 @@ h2.heading {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
 }
+
+@media (hover: hover) {
+  body, a, button, [tabindex="0"], input, textarea, select {
+    cursor: none !important;
+  }
+}

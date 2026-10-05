@@ -9,12 +9,19 @@ const rules = [
 <section class="aanya" id="aanya">
   <div class="container aanya-inner">
     <div class="aanya-portrait-wrap">
+      <svg style="display: none;">
+        <filter id="liquid">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" id="turbulence" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="displacement" />
+        </filter>
+      </svg>
       <img
         class="aanya-portrait"
         id="aanya-portrait"
         src="/assets/aanya.jpg"
         alt="Aanya, Tzinr's AI-generated creator"
         loading="lazy"
+        style="filter: url(#liquid);"
       />
     </div>
     <div class="aanya-copy">
