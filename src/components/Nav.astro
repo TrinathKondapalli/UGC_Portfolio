@@ -3,7 +3,7 @@
 <header class="nav" id="site-nav">
   <div class="nav-inner container">
     <a href="#main" class="nav-logo" aria-label="Tzinr home">
-      <img src="/assets/logo.svg" alt="" width="96" height="28" />
+      <img src="/assets/TzinrUGC.png" alt="Tzinr logo" height="28" style="width: auto; height: 28px;" />
       <span class="visually-hidden">Tzinr</span>
     </a>
 
@@ -16,7 +16,7 @@
 
     <a href="#sample" class="btn btn-ghost nav-cta" id="nav-cta">
       <span class="blink-dot" aria-hidden="true"></span>
-      Get a free sample
+      Book Demo
     </a>
 
     <button
@@ -45,28 +45,48 @@
       <a href="#how" data-nav-link data-mobile>How it works</a>
       <a href="#aanya" data-nav-link data-mobile>Aanya</a>
       <a href="#faq" data-nav-link data-mobile>FAQ</a>
-      <a href="#sample" class="btn btn-primary" data-mobile>Get a free sample</a>
+      <a href="#sample" class="btn btn-primary" data-mobile>Book Demo</a>
     </nav>
   </div>
 </header>
 
 <style>
   .nav {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 100;
-    background: rgba(0, 0, 0, 0.86);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
     transition: transform var(--base) var(--ease-out);
   }
-  .nav.nav-hidden { transform: translateY(-100%); }
+  .nav.nav-hidden { transform: translateY(-120%); }
 
   .nav-inner {
     display: flex;
     align-items: center;
     gap: var(--sp-4);
     height: 72px;
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 var(--side-padding);
+  }
+
+  @media (min-width: 900px) {
+    .nav {
+      top: var(--sp-4);
+      padding: 0 var(--side-padding);
+    }
+    .nav-inner {
+      margin: 0 auto;
+      height: 64px;
+      border-radius: 32px;
+      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0 var(--sp-2) 0 var(--sp-4);
+      gap: var(--sp-5);
+      max-width: fit-content;
+    }
   }
 
   .nav-logo {
@@ -75,7 +95,9 @@
     text-decoration: none;
     margin-right: auto;
   }
-  .nav-logo img { height: 24px; width: auto; }
+  @media (min-width: 900px) {
+    .nav-logo { margin-right: 0; }
+  }
 
   .nav-links {
     display: none;
@@ -107,7 +129,10 @@
   .nav-cta { display: none; }
   @media (min-width: 900px) {
     .nav-links { display: flex; }
-    .nav-cta { display: inline-flex; }
+    .nav-cta { 
+      display: inline-flex; 
+      border-radius: 32px;
+    }
   }
   .nav-cta.solid {
     background: var(--rec);
