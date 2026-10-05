@@ -1,0 +1,331 @@
+---
+import { whatsappUrl } from '../config';
+---
+<section class="sample" id="sample">
+  <div class="container sample-inner">
+    <div class="sample-copy">
+      <h2 class="heading">Request a free sample ad</h2>
+      <p class="sub">
+        Tell us about your product. We take a limited number of free samples each week.
+      </p>
+      <p class="sample-whatsapp-line">
+        Prefer WhatsApp?
+        <a class="btn btn-ghost" href={whatsappUrl()} target="_blank" rel="noopener">
+          Message us on WhatsApp
+        </a>
+      </p>
+    </div>
+
+    <div class="sample-form-wrap" id="sample-form-wrap">
+      <form
+        name="sample-request"
+        method="POST"
+        action="/thanks"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        id="sample-form"
+      >
+        <input type="hidden" name="form-name" value="sample-request" />
+        <p class="visually-hidden">
+          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+        </p>
+
+        <div class="field">
+          <input type="text" id="brand" name="brand" placeholder=" " required />
+          <label for="brand">Brand name</label>
+          <p class="field-error" data-error-for="brand" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <input type="url" id="product-link" name="product-link" placeholder=" " required />
+          <label for="product-link">Product link</label>
+          <p class="field-error" data-error-for="product-link" role="alert"></p>
+        </div>
+
+        <fieldset class="chip-group">
+          <legend class="caption">Category</legend>
+          <div class="chips">
+            <input type="radio" id="cat-beauty" name="category" value="Beauty" class="visually-hidden" required />
+            <label for="cat-beauty" class="chip">Beauty</label>
+
+            <input type="radio" id="cat-fashion" name="category" value="Fashion" class="visually-hidden" />
+            <label for="cat-fashion" class="chip">Fashion</label>
+
+            <input type="radio" id="cat-fitness" name="category" value="Fitness" class="visually-hidden" />
+            <label for="cat-fitness" class="chip">Fitness</label>
+          </div>
+          <p class="field-error" data-error-for="category" role="alert"></p>
+        </fieldset>
+
+        <div class="field field-phone">
+          <span class="phone-prefix" aria-hidden="true">+91</span>
+          <input
+            type="tel"
+            id="whatsapp-number"
+            name="whatsapp-number"
+            placeholder=" "
+            inputmode="numeric"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required
+          />
+          <label for="whatsapp-number">Your WhatsApp number</label>
+          <p class="field-error" data-error-for="whatsapp-number" role="alert"></p>
+        </div>
+
+        <div class="field field-textarea">
+          <textarea id="note" name="note" placeholder=" " maxlength="300"></textarea>
+          <label for="note">Anything we should know?</label>
+          <p class="caption char-counter" id="char-counter">0/300</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary sample-submit" id="sample-submit">
+          <span class="submit-label">Send request</span>
+        </button>
+      </form>
+
+      <div class="sample-success" id="sample-success" hidden>
+        <p class="lead">Request sent. We'll reply on WhatsApp.</p>
+        <a class="btn btn-ghost" href={whatsappUrl()} target="_blank" rel="noopener">
+          Or message us now
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sample-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  @media (min-width: 900px) {
+    .sample-inner {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--sp-6);
+    }
+  }
+
+  .sample-copy { flex: 1 1 36%; max-width: 420px; }
+
+  .sample-whatsapp-line {
+    margin-top: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    align-items: flex-start;
+    font-size: var(--text-body);
+    color: var(--smoke);
+  }
+
+  .sample-form-wrap { flex: 1 1 64%; max-width: 560px; width: 100%; }
+
+  #sample-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .field {
+    position: relative;
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: var(--graphite);
+    border: 1px solid var(--line);
+    border-radius: var(--sp-1);
+    color: var(--chalk);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    padding: 22px var(--sp-2) 10px;
+    transition: border-color var(--fast) var(--ease-out);
+  }
+  .field textarea { min-height: 96px; resize: vertical; padding-top: 24px; }
+  .field input:focus,
+  .field textarea:focus { border-color: var(--marigold); }
+  .field input.invalid,
+  .field textarea.invalid { border-color: #e35b4a; }
+
+  .field label {
+    position: absolute;
+    left: var(--sp-2);
+    top: 16px;
+    font-size: var(--text-body);
+    color: var(--smoke);
+    pointer-events: none;
+    transition: transform var(--fast) var(--ease-out), font-size var(--fast) var(--ease-out), color var(--fast) var(--ease-out);
+    transform-origin: left top;
+  }
+  .field input:focus + label,
+  .field input:not(:placeholder-shown) + label,
+  .field textarea:focus + label,
+  .field textarea:not(:placeholder-shown) + label {
+    transform: translateY(-9px);
+    font-size: 12px;
+  }
+
+  .field-phone input { padding-left: 52px; }
+  .phone-prefix {
+    position: absolute;
+    left: var(--sp-2);
+    top: 16px;
+    color: var(--smoke);
+    font-size: var(--text-body);
+  }
+  .field-phone label { left: 52px; }
+
+  .field-error {
+    min-height: 18px;
+    margin-top: 4px;
+    font-size: var(--text-caption);
+    color: #e35b4a;
+  }
+
+  .chip-group { border: none; padding: 0; margin: 0; }
+  .chip-group legend { margin-bottom: var(--sp-1); padding: 0; }
+  .chips { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--sp-3);
+    border-radius: var(--radius-button);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    font-size: var(--text-button);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--fast) var(--ease-out), color var(--fast) var(--ease-out), border-color var(--fast) var(--ease-out);
+  }
+  input:checked + .chip {
+    background: var(--marigold);
+    color: var(--ink);
+    border-color: var(--marigold);
+  }
+  input:focus-visible + .chip {
+    outline: 2px solid var(--marigold);
+    outline-offset: 3px;
+  }
+
+  .char-counter { margin-top: 4px; text-align: right; }
+
+  .sample-submit {
+    align-self: flex-start;
+    margin-top: var(--sp-1);
+    position: relative;
+  }
+  .sample-submit.loading { color: transparent; pointer-events: none; }
+  .sample-submit.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0,0,0,0.3);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .sample-success {
+    background: var(--graphite);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-panel);
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-3);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('sample-form') as HTMLFormElement | null;
+  const successEl = document.getElementById('sample-success');
+  const submitBtn = document.getElementById('sample-submit') as HTMLButtonElement | null;
+  const counter = document.getElementById('char-counter');
+  const note = document.getElementById('note') as HTMLTextAreaElement | null;
+  const phone = document.getElementById('whatsapp-number') as HTMLInputElement | null;
+  const categoryInputs = Array.from(
+    document.querySelectorAll<HTMLInputElement>('input[name="category"]')
+  );
+
+  // Native constraint validation UI is a browser default, not a designed one;
+  // disable it once JS is available and drive messaging ourselves. Without JS,
+  // the browser's own required-field checks still apply as a fallback.
+  if (form) form.noValidate = true;
+
+  note?.addEventListener('input', () => {
+    if (counter) counter.textContent = `${note.value.length}/300`;
+  });
+
+  const errorMessages: Record<string, string> = {
+    brand: 'Enter your brand name',
+    'product-link': 'Enter a valid product link',
+    'whatsapp-number': 'Enter a 10-digit mobile number',
+  };
+
+  function validateField(field: HTMLInputElement) {
+    const errorEl = form?.querySelector<HTMLElement>(`[data-error-for="${field.id}"]`);
+    const valid = field.checkValidity();
+    field.classList.toggle('invalid', !valid);
+    if (errorEl) errorEl.textContent = valid ? '' : errorMessages[field.id] ?? 'This field is required';
+    return valid;
+  }
+
+  function validateCategory() {
+    const errorEl = form?.querySelector<HTMLElement>('[data-error-for="category"]');
+    const valid = categoryInputs.some((input) => input.checked);
+    if (errorEl) errorEl.textContent = valid ? '' : 'Choose a category';
+    return valid;
+  }
+
+  phone?.addEventListener('blur', () => validateField(phone));
+  document.getElementById('brand')?.addEventListener('blur', (e) => validateField(e.target as HTMLInputElement));
+  document.getElementById('product-link')?.addEventListener('blur', (e) => validateField(e.target as HTMLInputElement));
+  categoryInputs.forEach((input) => input.addEventListener('change', validateCategory));
+
+  function encode(data: Record<string, string>) {
+    return Object.keys(data)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .join('&');
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const fields = ['brand', 'product-link', 'whatsapp-number'].map(
+      (id) => document.getElementById(id) as HTMLInputElement
+    );
+    const fieldsValid = fields.map(validateField).every(Boolean);
+    const categoryValid = validateCategory();
+    if (!fieldsValid || !categoryValid) return;
+
+    submitBtn?.classList.add('loading');
+
+    const formData = new FormData(form);
+    const payload: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      payload[key] = String(value);
+    });
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode(payload),
+    })
+      .then(() => {
+        form.hidden = true;
+        if (successEl) successEl.hidden = false;
+      })
+      .catch(() => {
+        form.submit();
+      })
+      .finally(() => {
+        submitBtn?.classList.remove('loading');
+      });
+  });
+</script>

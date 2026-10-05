@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import WorkRail from '../components/WorkRail.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Niches from '../components/Niches.astro';
+import Aanya from '../components/Aanya.astro';
+import SampleForm from '../components/SampleForm.astro';
+import Faq from '../components/Faq.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import Footer from '../components/Footer.astro';
+
+const allWork = await getCollection('work');
+const sorted = allWork.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latestFive = sorted.slice(0, 5);
+const featured = sorted.filter((item) => item.data.featured).slice(0, 3);
+---
+<Base>
+  <Nav />
+  <main id="main">
+    <Hero featured={featured} />
+    <WorkRail items={latestFive} />
+    <HowItWorks />
+    <Niches items={sorted} />
+    <Aanya />
+    <SampleForm />
+    <Faq />
+    <ClosingCta />
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  import { initMotion } from '../scripts/motion';
+  initMotion();
+</script>

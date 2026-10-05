@@ -175,3 +175,105 @@
     font-size: var(--text-button);
   }
 </style>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const navCta = document.getElementById('nav-cta');
+  const menuBtn = document.getElementById('nav-menu-btn');
+  const closeBtn = document.getElementById('nav-mobile-close');
+  const panel = document.getElementById('nav-mobile-panel');
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
+  const heroCta = document.getElementById('hero-cta');
+
+  // Hide on scroll down, show on scroll up.
+  let lastY = window.scrollY;
+  window.addEventListener(
+    'scroll',
+    () => {
+      const y = window.scrollY;
+      if (!nav) return;
+      if (y > lastY && y > 120) nav.classList.add('nav-hidden');
+      else nav.classList.remove('nav-hidden');
+      lastY = y;
+    },
+    { passive: true }
+  );
+
+  // Nav CTA solid once hero CTA scrolls out of view.
+  if (heroCta && navCta) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        navCta.classList.toggle('solid', !entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(heroCta);
+  }
+
+  // Active link tracking.
+  const sections = navLinks
+    .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
+    .filter((el): el is Element => Boolean(el));
+  if (sections.length) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = `#${entry.target.id}`;
+          const matches = navLinks.filter((l) => l.getAttribute('href') === id);
+          if (entry.isIntersecting) {
+            navLinks.forEach((l) => l.classList.remove('active'));
+            matches.forEach((l) => l.classList.add('active'));
+          }
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px' }
+    );
+    sections.forEach((s) => sectionObserver.observe(s));
+  }
+
+  // Mobile menu with focus trap.
+  function openMenu() {
+    panel?.classList.add('open');
+    panel?.setAttribute('aria-hidden', 'false');
+    menuBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  }
+  function closeMenu() {
+    panel?.classList.remove('open');
+    panel?.setAttribute('aria-hidden', 'true');
+    menuBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    menuBtn?.focus();
+  }
+
+  menuBtn?.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+
+  panel?.querySelectorAll('[data-mobile]').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!panel?.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      closeMenu();
+      return;
+    }
+    if (e.key === 'Tab') {
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>('a, button')
+      ).filter((el) => el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+</script>

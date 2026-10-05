@@ -1,0 +1,137 @@
+---
+const faqs = [
+  {
+    q: 'What do I get?',
+    a: 'A finished vertical ad (9:16) for Instagram Reels and YouTube Shorts, plus alternative opening hooks so you can test which one stops the scroll.',
+  },
+  {
+    q: 'Is the free sample really free?',
+    a: 'Yes. We take a limited number of free samples each week so we can give each one proper attention.',
+  },
+  {
+    q: 'Will people know it’s AI?',
+    a: 'Yes. Every ad carries an AI-generated label and disclosure. We believe that’s the only way to use an AI creator responsibly.',
+  },
+  {
+    q: 'Can you use a different face or language?',
+    a: 'English with Aanya is available now. More AI creators and Indian languages are planned.',
+  },
+  {
+    q: 'Which products work best?',
+    a: 'Products with a clear visual moment: a shade, a texture, sparkle, fit, or a function you can show in a few seconds.',
+  },
+];
+---
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="heading">Questions</h2>
+    </div>
+
+    <div class="faq-list" id="faq-list">
+      {faqs.map((item) => (
+        <details class="faq-item">
+          <summary class="faq-summary">
+            <span class="faq-q">{item.q}</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-content-wrap">
+            <div class="faq-content">
+              <p>{item.a}</p>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-list {
+    border-top: 1px solid var(--line);
+    max-width: 760px;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-3) 0;
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
+  }
+  .faq-summary::-webkit-details-marker { display: none; }
+
+  .faq-q {
+    font-size: var(--text-card);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .faq-icon {
+    position: relative;
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+  }
+  .faq-icon::before,
+  .faq-icon::after {
+    content: "";
+    position: absolute;
+    background: var(--chalk);
+    top: 50%;
+    left: 50%;
+    transition: transform var(--base) var(--ease-out);
+  }
+  .faq-icon::before {
+    width: 14px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+  }
+  .faq-icon::after {
+    width: 2px;
+    height: 14px;
+    transform: translate(-50%, -50%);
+  }
+  details[open] .faq-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg) scaleY(0);
+  }
+
+  .faq-content-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--base) var(--ease-in-out);
+  }
+  details[open] .faq-content-wrap {
+    grid-template-rows: 1fr;
+  }
+  .faq-content {
+    overflow: hidden;
+  }
+  .faq-content p {
+    padding-bottom: var(--sp-3);
+    color: var(--smoke);
+    font-size: var(--text-body);
+    max-width: 65ch;
+  }
+</style>
+
+<script>
+  const list = document.getElementById('faq-list');
+  const items = Array.from(list?.querySelectorAll('details') ?? []);
+  items.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      }
+    });
+  });
+</script>

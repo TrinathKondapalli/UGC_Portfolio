@@ -1,0 +1,233 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ReelCard from './ReelCard.astro';
+import { instagramUrl } from '../config';
+
+interface Props {
+  items: CollectionEntry<'work'>[];
+}
+const { items } = Astro.props;
+const needsFiller = items.length < 5;
+---
+<section class="work" id="work">
+  <div class="container work-head-row">
+    <div class="section-head">
+      <h2 class="heading">Latest on Instagram</h2>
+      <p class="sub">Concept ads made with our AI creator. Tap any ad to watch it on Instagram.</p>
+    </div>
+    <a class="btn btn-ghost" href={instagramUrl} target="_blank" rel="noopener">
+      Follow on Instagram
+    </a>
+  </div>
+
+  <div class="rail-wrap container">
+    <button class="rail-arrow rail-arrow-left" id="rail-prev" aria-label="Scroll to previous ads">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <ul class="rail" id="work-rail" tabindex="0" aria-label="Latest ads">
+      {items.map((item) => (
+        <li>
+          <ReelCard item={item} />
+        </li>
+      ))}
+      {needsFiller && (
+        <li>
+          <a class="filler-card" href="#sample">
+            <span class="filler-title">Your product could be next</span>
+            <span class="filler-sub">Get a free sample ad</span>
+          </a>
+        </li>
+      )}
+    </ul>
+
+    <button class="rail-arrow rail-arrow-right" id="rail-next" aria-label="Scroll to next ads">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .work-head-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-5);
+  }
+  @media (min-width: 900px) {
+    .work-head-row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .work-head-row .section-head { margin-bottom: 0; }
+  }
+
+  .rail-wrap {
+    position: relative;
+  }
+
+  .rail {
+    display: flex;
+    gap: var(--sp-3);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: var(--side-padding);
+    padding-bottom: var(--sp-2);
+    cursor: grab;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail.dragging { cursor: grabbing; scroll-snap-type: none; }
+
+  .rail-arrow {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .rail-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 40%;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--graphite);
+      border: 1px solid var(--line);
+      color: var(--chalk);
+      z-index: 2;
+      transform: translateY(-50%);
+    }
+    .rail-arrow-left { left: -22px; }
+    .rail-arrow-right { right: -22px; }
+    .rail-arrow:hover { border-color: var(--chalk); }
+  }
+
+  .filler-card {
+    flex: 0 0 auto;
+    width: 220px;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--radius-poster);
+    background: var(--marigold);
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: var(--sp-3);
+    gap: var(--sp-1);
+    scroll-snap-align: start;
+  }
+  @media (min-width: 560px) {
+    .filler-card { width: 250px; }
+  }
+  .filler-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+  .filler-sub {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
+
+<script>
+  import { initReelVideos } from '../scripts/video';
+  initReelVideos(document);
+
+  const rail = document.getElementById('work-rail') as HTMLElement | null;
+  const prevBtn = document.getElementById('rail-prev');
+  const nextBtn = document.getElementById('rail-next');
+
+  if (rail) {
+    const cardWidth = () => (rail.querySelector('li')?.clientWidth ?? 250) + 24;
+
+    prevBtn?.addEventListener('click', () => {
+      rail.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
+    });
+    nextBtn?.addEventListener('click', () => {
+      rail.scrollBy({ left: cardWidth(), behavior: 'smooth' });
+    });
+
+    rail.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        rail.scrollBy({ left: cardWidth(), behavior: 'smooth' });
+      } else if (e.key === 'ArrowLeft') {
+        rail.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
+      }
+    });
+
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let velocity = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let momentumId = 0;
+    let dragDistance = 0;
+
+    const pointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      isDown = true;
+      dragDistance = 0;
+      rail.classList.add('dragging');
+      startX = e.clientX;
+      scrollStart = rail.scrollLeft;
+      lastX = e.clientX;
+      lastTime = performance.now();
+      velocity = 0;
+      cancelAnimationFrame(momentumId);
+      rail.setPointerCapture(e.pointerId);
+    };
+
+    const pointerMove = (e: PointerEvent) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      dragDistance = Math.max(dragDistance, Math.abs(dx));
+      rail.scrollLeft = scrollStart - dx;
+      const now = performance.now();
+      const dt = now - lastTime || 16;
+      velocity = (e.clientX - lastX) / dt;
+      lastX = e.clientX;
+      lastTime = now;
+    };
+
+    const pointerUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      rail.classList.remove('dragging');
+      let v = velocity * -16;
+      const step = () => {
+        if (Math.abs(v) < 0.5) return;
+        rail.scrollLeft += v;
+        v *= 0.95;
+        momentumId = requestAnimationFrame(step);
+      };
+      step();
+    };
+
+    rail.addEventListener('pointerdown', pointerDown);
+    rail.addEventListener('pointermove', pointerMove);
+    rail.addEventListener('pointerup', pointerUp);
+    rail.addEventListener('pointerleave', pointerUp);
+    rail.addEventListener(
+      'click',
+      (e) => {
+        if (dragDistance > 6) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+  }
+</script>

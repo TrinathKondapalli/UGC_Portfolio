@@ -40,7 +40,7 @@ const lines = ["AI UGC ads for", "Indian D2C brands"];
 
     <div class="hero-fan" id="hero-fan">
       {featured.map((item, i) => (
-        <div class={`phone-frame phone-${i}`} data-phone>
+        <div class={`phone-frame phone-${i}`} data-phone data-base-scale={i === 1 ? 1.05 : 1}>
           <div class="phone-screen">
             {item.data.loop ? (
               <video
@@ -116,20 +116,22 @@ const lines = ["AI UGC ads for", "Indian D2C brands"];
   }
 
   .hero-fan {
-    position: relative;
     flex: 1 1 50%;
-    height: 380px;
+    width: 100%;
+    min-height: 320px;
+    padding-block: var(--sp-4);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   @media (min-width: 900px) {
-    .hero-fan { height: 520px; }
+    .hero-fan { min-height: 440px; }
   }
 
   .phone-frame {
-    position: absolute;
-    width: 200px;
+    position: relative;
+    flex: 0 0 auto;
+    width: 150px;
     aspect-ratio: 9 / 16;
     background: var(--graphite);
     border-radius: var(--radius-phone);
@@ -154,10 +156,11 @@ const lines = ["AI UGC ads for", "Indian D2C brands"];
     object-fit: cover;
   }
 
-  .phone-0 { transform: rotate(-9deg); z-index: 1; left: 8%; }
-  .phone-1 { transform: rotate(0deg) scale(1.05); z-index: 2; left: 50%; margin-left: -115px; }
-  .phone-2 { transform: rotate(9deg); z-index: 1; right: 8%; }
-  @media (max-width: 559px) {
-    .phone-1 { margin-left: -100px; }
+  .phone-0 { transform: rotate(-9deg); z-index: 1; margin-right: -24px; }
+  .phone-1 { transform: rotate(0deg) scale(1.05); z-index: 2; }
+  .phone-2 { transform: rotate(9deg); z-index: 1; margin-left: -24px; }
+  @media (min-width: 560px) {
+    .phone-0 { margin-right: -48px; }
+    .phone-2 { margin-left: -48px; }
   }
 </style>

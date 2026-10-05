@@ -1,0 +1,49 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: simple
+media_folder: "public/work"
+public_folder: "/work"
+
+collections:
+  - name: "work"
+    label: "Work"
+    folder: "src/content/work"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{title}} — {{niche}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string", hint: "e.g. Yellow Chimes oxidised jhumkas" }
+      - label: "Niche"
+        name: "niche"
+        widget: "select"
+        options: ["Beauty", "Fashion", "Fitness"]
+      - label: "Thumbnail"
+        name: "thumb"
+        widget: "image"
+        media_library:
+          config:
+            multiple: false
+        hint: "9:16 JPG, 540x960px, under 120KB"
+      - label: "Loop video"
+        name: "loop"
+        widget: "file"
+        required: false
+        hint: "Muted MP4, 3-4s, under 1.2MB. A same-name .webm is used automatically if present."
+      - label: "Instagram URL"
+        name: "instagramUrl"
+        widget: "string"
+        required: false
+        hint: "Leave blank to show 'Coming soon'"
+      - { label: "Date", name: "date", widget: "datetime" }
+      - label: "Featured in hero"
+        name: "featured"
+        widget: "boolean"
+        required: false
+        default: false
+        hint: "Up to 3 featured items appear in the homepage hero"

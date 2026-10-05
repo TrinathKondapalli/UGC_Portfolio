@@ -1,0 +1,37 @@
+---
+import { emailUrl } from '../config';
+---
+<section class="closing">
+  <div class="container closing-inner">
+    <h2 class="closing-heading">See your product as an ad before you pay a rupee</h2>
+    <div class="closing-actions">
+      <a class="btn btn-primary" id="closing-cta" href="#sample">Get a free sample ad</a>
+      <a class="btn btn-ghost" href={emailUrl}>Email us</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+
+  .closing-heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 2rem + 4vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    max-width: 16ch;
+  }
+
+  .closing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+
+  #closing-cta { will-change: transform; }
+</style>

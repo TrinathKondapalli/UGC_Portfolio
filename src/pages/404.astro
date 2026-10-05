@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<Base title="Page not found — Tzinr">
+  <Nav />
+  <main id="main">
+    <section class="notfound">
+      <div class="container notfound-inner">
+        <h1 class="heading">Page not found</h1>
+        <p class="lead">The page you're looking for doesn't exist or has moved.</p>
+        <a class="btn btn-primary" href="/">Back to home</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .notfound { padding-block: var(--sp-8); }
+  .notfound-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    align-items: flex-start;
+    max-width: 640px;
+  }
+</style>
