@@ -5,4 +5,7 @@ export default defineConfig({
   site: 'https://ugc-portfolio-weld.vercel.app',
   output: 'static',
   integrations: [sitemap()],
+  devToolbar: {
+    enabled: false,
+  },
 });
