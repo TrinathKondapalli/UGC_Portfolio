@@ -33,10 +33,8 @@ export function initMotion() {
 
   const runScrollAnimations = () => {
     heroScrollParallax();
-    workRailPinning();
     fanPointerTilt();
-    stackingCardsEffect();
-    nicheWipes();
+    stepLineScrub();
     aanyaReveal();
     magneticCta();
   };
@@ -163,52 +161,47 @@ function fanPointerTilt() {
   });
 }
 
-function stackingCardsEffect() {
-  const cards = gsap.utils.toArray<HTMLElement>('.step-card');
-  if (cards.length === 0) return;
+function stepLineScrub() {
+  const track = document.getElementById('steps-track');
+  const fill = document.getElementById('steps-line-fill');
+  const numbers = gsap.utils.toArray<HTMLElement>('[data-step-number]');
+  if (!track || !fill) return;
 
-  cards.forEach((card, i) => {
-    if (i === cards.length - 1) return;
-    const inner = card.querySelector('.step-card-inner');
-    if (!inner) return;
-    
-    gsap.to(inner, {
-      scale: 0.95 - (cards.length - i) * 0.01,
-      opacity: 0.4,
-      scrollTrigger: {
-        trigger: cards[i + 1],
-        start: 'top bottom',
-        end: 'top top',
-        scrub: true,
-      }
-    });
+  const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+  gsap.set(fill, isDesktop ? { scaleX: 0 } : { scaleY: 0 });
+  gsap.set(numbers, { color: 'var(--smoke)' });
+
+  ScrollTrigger.create({
+    trigger: track,
+    start: 'top 75%',
+    end: 'bottom 60%',
+    scrub: 0.4,
+    onUpdate: (self) => {
+      gsap.set(fill, isDesktop ? { scaleX: self.progress } : { scaleY: self.progress });
+      numbers.forEach((num, i) => {
+        const threshold = i / (numbers.length - 1);
+        gsap.set(num, { color: self.progress >= threshold ? 'var(--rec)' : 'var(--smoke)' });
+      });
+    },
   });
 }
 
 function aanyaReveal() {
   const portrait = document.getElementById('aanya-portrait');
-  const displacement = document.getElementById('displacement');
-  if (!portrait || !displacement) return;
+  if (!portrait) return;
 
-  gsap.set(portrait, { filter: 'url(#liquid)', opacity: 0 });
-  gsap.set(displacement, { attr: { scale: 100 } });
-
+  gsap.set(portrait, { filter: 'blur(6px)' });
   ScrollTrigger.create({
     trigger: portrait,
     start: 'top 80%',
     once: true,
     onEnter: () => {
-      const tl = gsap.timeline();
-      tl.to(portrait, { opacity: 1, duration: 0.8, ease: 'power2.out' });
-      tl.to(displacement, { attr: { scale: 0 }, duration: 2, ease: 'power4.out' }, "<");
+      gsap.to(portrait, {
+        filter: 'blur(0px)',
+        duration: 0.7,
+        ease: 'power2.out',
+      });
     },
-  });
-
-  portrait.parentElement?.addEventListener('mouseenter', () => {
-    gsap.to(displacement, { attr: { scale: 20 }, duration: 0.5, ease: 'power2.out' });
-  });
-  portrait.parentElement?.addEventListener('mouseleave', () => {
-    gsap.to(displacement, { attr: { scale: 0 }, duration: 1, ease: 'power4.out' });
   });
 }
 
@@ -283,52 +276,4 @@ function heroScrollParallax() {
   }
 }
 
-function workRailPinning() {
-  if (isTouch()) return;
-  const section = document.getElementById('work');
-  const rail = document.getElementById('work-rail');
-  if (!section || !rail) return;
 
-  const getScrollAmount = () => {
-    const railWidth = rail.scrollWidth;
-    return -(railWidth - window.innerWidth + 40);
-  };
-
-  gsap.to(rail, {
-    x: getScrollAmount,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: () => `+=${rail.scrollWidth}`,
-      pin: true,
-      scrub: 1,
-      invalidateOnRefresh: true,
-    }
-  });
-}
-
-function nicheWipes() {
-  const container = document.getElementById('niches-pin-container');
-  const panels = gsap.utils.toArray<HTMLElement>('.niche-wipe-panel');
-  if (!container || panels.length < 2) return;
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: container,
-      pin: true,
-      scrub: 1,
-      start: 'top top',
-      end: () => "+=" + (panels.length * window.innerHeight),
-      invalidateOnRefresh: true,
-    }
-  });
-
-  panels.forEach((panel, i) => {
-    if (i === 0) return;
-    tl.fromTo(panel, 
-      { yPercent: 100 },
-      { yPercent: 0, ease: 'none' }
-    );
-  });
-}
