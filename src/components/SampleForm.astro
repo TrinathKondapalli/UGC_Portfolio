@@ -8,27 +8,19 @@ import { whatsappUrl } from '../config';
       <p class="sub">
         Tell us about your product. We take a limited number of free samples each week.
       </p>
-      <p class="sample-whatsapp-line">
-        Prefer WhatsApp?
-        <a class="btn btn-ghost" href={whatsappUrl()} target="_blank" rel="noopener">
-          Message us on WhatsApp
-        </a>
-      </p>
+
     </div>
 
     <div class="sample-form-wrap" id="sample-form-wrap">
       <form
         name="sample-request"
         method="POST"
-        action="/thanks"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
+        action="https://api.web3forms.com/submit"
         id="sample-form"
       >
-        <input type="hidden" name="form-name" value="sample-request" />
-        <p class="visually-hidden">
-          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-        </p>
+        <!-- Replace YOUR_ACCESS_KEY_HERE with your Web3Forms access key -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+        <input type="hidden" name="redirect" value="https://tzinr.com/thanks" />
 
         <div class="field">
           <input type="text" id="brand" name="brand" placeholder=" " required />
@@ -57,20 +49,16 @@ import { whatsappUrl } from '../config';
           <p class="field-error" data-error-for="category" role="alert"></p>
         </fieldset>
 
-        <div class="field field-phone">
-          <span class="phone-prefix" aria-hidden="true">+91</span>
+        <div class="field">
           <input
-            type="tel"
-            id="whatsapp-number"
-            name="whatsapp-number"
+            type="email"
+            id="email"
+            name="email"
             placeholder=" "
-            inputmode="numeric"
-            pattern="[0-9]{10}"
-            maxlength="10"
             required
           />
-          <label for="whatsapp-number">Your WhatsApp number</label>
-          <p class="field-error" data-error-for="whatsapp-number" role="alert"></p>
+          <label for="email">Your email address</label>
+          <p class="field-error" data-error-for="email" role="alert"></p>
         </div>
 
         <div class="field field-textarea">
@@ -85,10 +73,7 @@ import { whatsappUrl } from '../config';
       </form>
 
       <div class="sample-success" id="sample-success" hidden>
-        <p class="lead">Request sent. We'll reply on WhatsApp.</p>
-        <a class="btn btn-ghost" href={whatsappUrl()} target="_blank" rel="noopener">
-          Or message us now
-        </a>
+        <p class="lead">Request sent. We'll reply via email shortly.</p>
       </div>
     </div>
   </div>
