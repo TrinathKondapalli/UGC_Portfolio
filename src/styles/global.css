@@ -52,7 +52,7 @@ input:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--marigold);
+  outline: 2px solid var(--rec);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -62,7 +62,7 @@ summary:focus-visible,
   position: absolute;
   left: var(--sp-2);
   top: -100px;
-  background: var(--marigold);
+  background: var(--rec);
   color: var(--ink);
   padding: var(--sp-1) var(--sp-3);
   border-radius: var(--radius-button);
@@ -140,10 +140,10 @@ h2.heading {
   white-space: nowrap;
 }
 .btn-primary {
-  background: var(--marigold);
+  background: var(--rec);
   color: var(--ink);
 }
-.btn-primary:hover { background: var(--marigold-hover); }
+.btn-primary:hover { background: var(--rec-hover); }
 
 .btn-ghost {
   background: transparent;
@@ -167,3 +167,19 @@ h2.heading {
 .no-js-hide { display: none; }
 .js .no-js-hide { display: initial; }
 .js .js-hide { display: none; }
+
+.blink-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--rec);
+  animation: blink 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .blink-dot { animation: none; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}

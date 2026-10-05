@@ -24,7 +24,11 @@ const panels = [
   },
 ] as const;
 
-const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
+const itemMap: Record<string, string> = {
+  Fashion: "Yellow Chimes oxidised jhumkas",
+  Fitness: "Boldfit EVA yoga mat"
+};
+const getForNiche = (niche: string) => items.find((i) => i.data.title === itemMap[niche]);
 ---
 <section class="niches" id="niches">
   <div class="container">
@@ -37,9 +41,9 @@ const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
 
     <div class="niche-grid">
       {panels.map((panel) => {
-        const newest = newestFor(panel.key);
+        const newest = getForNiche(panel.key);
         return (
-          <div class="niche-panel" data-niche-panel={panel.key} tabindex="0">
+          <div class={`niche-panel ${!newest ? 'no-image' : ''}`} data-niche-panel={panel.key} tabindex="0">
             <div class="niche-bg" aria-hidden="true">
               {newest?.data.loop ? (
                 <video
@@ -65,13 +69,17 @@ const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
                   <li>{point}</li>
                 ))}
               </ul>
-              <button
-                class="niche-link"
-                data-niche-link={panel.key}
-                type="button"
-              >
-                See a {panel.key.toLowerCase()} ad
-              </button>
+              {newest ? (
+                <button
+                  class="niche-link"
+                  data-niche-link={panel.key}
+                  type="button"
+                >
+                  See a {panel.key.toLowerCase()} ad
+                </button>
+              ) : (
+                <div class="niche-coming-soon">{panel.key} ad coming soon</div>
+              )}
             </div>
           </div>
         );
@@ -106,6 +114,10 @@ const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
       min-height: 420px;
       display: flex;
       align-items: flex-end;
+    }
+    .niche-panel.no-image {
+      min-height: auto;
+      align-items: flex-start;
     }
     .niche-panel:last-child { border-right: none; }
   }
@@ -167,10 +179,10 @@ const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
     top: 0.65em;
     width: 8px;
     height: 2px;
-    background: var(--marigold);
+    background: var(--rec);
   }
 
-  .niche-link {
+  .niche-link, .niche-coming-soon {
     background: none;
     border: none;
     padding: 0;
@@ -180,6 +192,14 @@ const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
     text-decoration: underline;
     text-underline-offset: 3px;
     min-height: 44px;
+    display: inline-block;
+  }
+  .niche-coming-soon {
+    color: var(--smoke);
+    font-size: var(--text-button);
+    font-weight: 500;
+    min-height: 44px;
+    display: inline-block;
   }
 </style>
 

@@ -1,13 +1,12 @@
 :root {
   /* Colour */
   --ink: #000000;
-  --chalk: #FAFAF7;
-  --peacock: #0E4D4F;
-  --graphite: #161616;
-  --smoke: #8C8C8C;
-  --marigold: #F4A51C;
-  --marigold-hover: #FFC14D;
-  --line: #2A2A2A;
+  --chalk: #F2F0EA;
+  --rec: #FF3B30;
+  --rec-hover: #FF5A4F;
+  --graphite: #151515;
+  --smoke: #8A8A85;
+  --line: #262626;
 
   /* Type */
   --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;

@@ -14,7 +14,10 @@
       <a href="#faq" data-nav-link>FAQ</a>
     </nav>
 
-    <a href="#sample" class="btn btn-ghost nav-cta" id="nav-cta">Get a free sample</a>
+    <a href="#sample" class="btn btn-ghost nav-cta" id="nav-cta">
+      <span class="blink-dot" aria-hidden="true"></span>
+      Get a free sample
+    </a>
 
     <button
       class="nav-menu-btn"
@@ -107,11 +110,28 @@
     .nav-cta { display: inline-flex; }
   }
   .nav-cta.solid {
-    background: var(--marigold);
+    background: var(--rec);
     color: var(--ink);
-    border-color: var(--marigold);
+    border-color: var(--rec);
   }
-  .nav-cta.solid:hover { background: var(--marigold-hover); }
+  .nav-cta.solid:hover { background: var(--rec-hover); }
+  .nav-cta.solid .blink-dot { background: var(--ink); }
+
+  .blink-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--rec);
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .blink-dot { animation: none; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
 
   .nav-menu-btn {
     display: inline-flex;

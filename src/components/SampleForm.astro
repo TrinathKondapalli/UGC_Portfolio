@@ -145,7 +145,7 @@ import { whatsappUrl } from '../config';
   }
   .field textarea { min-height: 96px; resize: vertical; padding-top: 24px; }
   .field input:focus,
-  .field textarea:focus { border-color: var(--marigold); }
+  .field textarea:focus { border-color: var(--rec); }
   .field input.invalid,
   .field textarea.invalid { border-color: #e35b4a; }
 
@@ -201,12 +201,12 @@ import { whatsappUrl } from '../config';
     transition: background var(--fast) var(--ease-out), color var(--fast) var(--ease-out), border-color var(--fast) var(--ease-out);
   }
   input:checked + .chip {
-    background: var(--marigold);
+    background: var(--rec);
     color: var(--ink);
-    border-color: var(--marigold);
+    border-color: var(--rec);
   }
   input:focus-visible + .chip {
-    outline: 2px solid var(--marigold);
+    outline: 2px solid var(--rec);
     outline-offset: 3px;
   }
 

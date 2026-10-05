@@ -87,7 +87,7 @@ function stepLineScrub() {
 
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
   gsap.set(fill, isDesktop ? { scaleX: 0 } : { scaleY: 0 });
-  gsap.set(numbers, { color: '#8C8C8C' });
+  gsap.set(numbers, { color: 'var(--smoke)' });
 
   ScrollTrigger.create({
     trigger: track,
@@ -98,7 +98,7 @@ function stepLineScrub() {
       gsap.set(fill, isDesktop ? { scaleX: self.progress } : { scaleY: self.progress });
       numbers.forEach((num, i) => {
         const threshold = i / (numbers.length - 1);
-        gsap.set(num, { color: self.progress >= threshold ? '#F4A51C' : '#8C8C8C' });
+        gsap.set(num, { color: self.progress >= threshold ? 'var(--rec)' : 'var(--smoke)' });
       });
     },
   });
