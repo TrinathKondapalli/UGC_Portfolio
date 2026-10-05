@@ -1,0 +1,55 @@
+:root {
+  /* Colour */
+  --ink: #000000;
+  --chalk: #FAFAF7;
+  --peacock: #0E4D4F;
+  --graphite: #161616;
+  --smoke: #8C8C8C;
+  --marigold: #F4A51C;
+  --marigold-hover: #FFC14D;
+  --line: #2A2A2A;
+
+  /* Type */
+  --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+
+  --text-hero: clamp(3rem, 2.1rem + 4.2vw, 6rem);
+  --text-h2: clamp(2.125rem, 1.6rem + 2.4vw, 3.5rem);
+  --text-card: clamp(1.3125rem, 1.2rem + 0.5vw, 1.5rem);
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --text-body: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+  --text-button: 1rem;
+  --text-caption: clamp(0.8125rem, 0.78rem + 0.1vw, 0.875rem);
+
+  /* Layout */
+  --max-width: 1180px;
+  --gutter: 24px;
+  --side-padding: 24px;
+  --section-padding: 128px;
+  --section-padding-mobile: 80px;
+
+  /* Spacing scale */
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-5: 48px;
+  --sp-6: 64px;
+  --sp-7: 96px;
+  --sp-8: 128px;
+
+  /* Radius */
+  --radius-phone: 26px;
+  --radius-poster: 18px;
+  --radius-panel: 22px;
+  --radius-button: 999px;
+  --radius-band: 0;
+
+  /* Motion */
+  --fast: 180ms;
+  --base: 320ms;
+  --slow: 700ms;
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --ease-in-out: cubic-bezier(.65,0,.35,1);
+  --stagger: 80ms;
+}

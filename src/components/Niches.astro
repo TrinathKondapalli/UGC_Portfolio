@@ -1,0 +1,227 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  items: CollectionEntry<'work'>[];
+}
+const { items } = Astro.props;
+
+const panels = [
+  {
+    key: 'Beauty',
+    title: 'Beauty and personal care',
+    points: ['True-to-shade swatches', 'Texture and application close-ups', 'Routine moments'],
+  },
+  {
+    key: 'Fashion',
+    title: 'Fashion and accessories',
+    points: ['Jewellery macro shots in window light', 'Real size on the body', 'Festive styling'],
+  },
+  {
+    key: 'Fitness',
+    title: 'Lifestyle and fitness',
+    points: ['The product doing its job', 'Scale in the hand', 'Home and on-the-go settings'],
+  },
+] as const;
+
+const newestFor = (niche: string) => items.find((i) => i.data.niche === niche);
+---
+<section class="niches" id="niches">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="heading">What we make ads for</h2>
+      <p class="sub">
+        Each category gets its own direction: what the viewer must see, how it's lit, and how it moves.
+      </p>
+    </div>
+
+    <div class="niche-grid">
+      {panels.map((panel) => {
+        const newest = newestFor(panel.key);
+        return (
+          <div class="niche-panel" data-niche-panel={panel.key} tabindex="0">
+            <div class="niche-bg" aria-hidden="true">
+              {newest?.data.loop ? (
+                <video
+                  muted
+                  playsinline
+                  loop
+                  preload="none"
+                  poster={newest.data.thumb}
+                  data-niche-video
+                >
+                  <source src={newest.data.loop.replace(/\.mp4$/, '.webm')} type="video/webm" />
+                  <source src={newest.data.loop} type="video/mp4" />
+                </video>
+              ) : newest ? (
+                <img src={newest.data.thumb} alt="" />
+              ) : null}
+              <div class="niche-overlay"></div>
+            </div>
+            <div class="niche-content">
+              <h3 class="step-title niche-title">{panel.title}</h3>
+              <ul class="niche-points">
+                {panel.points.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+              <button
+                class="niche-link"
+                data-niche-link={panel.key}
+                type="button"
+              >
+                See a {panel.key.toLowerCase()} ad
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .niche-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+  }
+  @media (min-width: 900px) {
+    .niche-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .niche-panel {
+    position: relative;
+    padding: var(--sp-5) var(--sp-3);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    cursor: pointer;
+  }
+  @media (min-width: 900px) {
+    .niche-panel {
+      border-bottom: none;
+      border-right: 1px solid var(--line);
+      min-height: 420px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .niche-panel:last-child { border-right: none; }
+  }
+  .niche-panel:last-child { border-bottom: none; }
+
+  .niche-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .niche-bg img,
+  .niche-bg video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity var(--base) var(--ease-out);
+  }
+  .niche-panel.active .niche-bg img,
+  .niche-panel.active .niche-bg video {
+    opacity: 0.6;
+  }
+  .niche-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    opacity: 1;
+    transition: opacity var(--base) var(--ease-out);
+  }
+  .niche-panel.active .niche-overlay {
+    opacity: 0.4;
+  }
+
+  .niche-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .niche-title { margin-bottom: var(--sp-3); }
+
+  .niche-points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+    margin-bottom: var(--sp-3);
+  }
+  .niche-points li {
+    position: relative;
+    padding-left: var(--sp-2);
+    font-size: var(--text-body);
+    color: var(--smoke);
+  }
+  .niche-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 8px;
+    height: 2px;
+    background: var(--marigold);
+  }
+
+  .niche-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--chalk);
+    font-weight: 600;
+    font-size: var(--text-button);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 44px;
+  }
+</style>
+
+<script>
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-niche-panel]'));
+  const isTouch = matchMedia('(hover: none)').matches;
+
+  const activate = (panel: HTMLElement) => {
+    panel.classList.add('active');
+    panel.querySelector('video')?.play().catch(() => {});
+  };
+  const deactivate = (panel: HTMLElement) => {
+    panel.classList.remove('active');
+    panel.querySelector('video')?.pause();
+  };
+
+  panels.forEach((panel) => {
+    if (isTouch) {
+      panel.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('[data-niche-link]')) return;
+        const willActivate = !panel.classList.contains('active');
+        panels.forEach(deactivate);
+        if (willActivate) activate(panel);
+      });
+    } else {
+      panel.addEventListener('mouseenter', () => activate(panel));
+      panel.addEventListener('mouseleave', () => deactivate(panel));
+      panel.addEventListener('focus', () => activate(panel));
+      panel.addEventListener('focusout', () => deactivate(panel));
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-niche-link]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const niche = link.dataset.nicheLink;
+      const card = document.querySelector<HTMLElement>(`[data-niche="${niche}"]`);
+      const target = card ?? document.getElementById('work');
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (card) {
+        card.classList.add('highlight');
+        setTimeout(() => card.classList.remove('highlight'), 1600);
+      }
+    });
+  });
+</script>

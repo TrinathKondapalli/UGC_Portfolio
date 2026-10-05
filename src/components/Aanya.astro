@@ -1,0 +1,88 @@
+---
+const rules = [
+  'Every ad is labelled AI-generated.',
+  'Aanya never claims she bought, owns or used a product.',
+  "Product benefits are presented as the brand's own claims.",
+  'No fake reviews, no invented results.',
+];
+---
+<section class="aanya" id="aanya">
+  <div class="container aanya-inner">
+    <div class="aanya-portrait-wrap">
+      <img
+        class="aanya-portrait"
+        id="aanya-portrait"
+        src="/assets/aanya.jpg"
+        alt="Aanya, Tzinr's AI-generated creator"
+        loading="lazy"
+      />
+    </div>
+    <div class="aanya-copy">
+      <h2 class="heading">Meet Aanya, our AI creator</h2>
+      <p class="lead aanya-lead">
+        Aanya is a fictional, AI-generated creator. She keeps the same face and voice across every
+        ad, so your brand gets a consistent presenter without casting or shoot days.
+      </p>
+      <ul class="aanya-rules">
+        {rules.map((rule) => (
+          <li>{rule}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .aanya-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  @media (min-width: 900px) {
+    .aanya-inner {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--sp-6);
+    }
+  }
+
+  .aanya-portrait-wrap {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+  }
+  .aanya-portrait {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .aanya-copy { flex: 1 1 auto; max-width: 560px; }
+
+  .aanya-lead { margin-top: var(--sp-2); }
+
+  .aanya-rules {
+    margin-top: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .aanya-rules li {
+    position: relative;
+    padding-left: var(--sp-3);
+    font-size: var(--text-caption);
+    color: var(--chalk);
+  }
+  .aanya-rules li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 10px;
+    height: 2px;
+    background: var(--marigold);
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+---
+<header class="nav" id="site-nav">
+  <div class="nav-inner container">
+    <a href="#main" class="nav-logo" aria-label="Tzinr home">
+      <img src="/assets/logo.svg" alt="" width="96" height="28" />
+      <span class="visually-hidden">Tzinr</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-nav-link>Work</a>
+      <a href="#how" data-nav-link>How it works</a>
+      <a href="#aanya" data-nav-link>Aanya</a>
+      <a href="#faq" data-nav-link>FAQ</a>
+    </nav>
+
+    <a href="#sample" class="btn btn-ghost nav-cta" id="nav-cta">Get a free sample</a>
+
+    <button
+      class="nav-menu-btn"
+      id="nav-menu-btn"
+      aria-expanded="false"
+      aria-controls="nav-mobile-panel"
+    >
+      <span class="visually-hidden">Open menu</span>
+      <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+        <path d="M0 1H22" stroke="currentColor" stroke-width="2"/>
+        <path d="M0 8H22" stroke="currentColor" stroke-width="2"/>
+        <path d="M0 15H22" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nav-mobile-panel" id="nav-mobile-panel" aria-hidden="true">
+    <button class="nav-mobile-close" id="nav-mobile-close" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M1 1L19 19M19 1L1 19" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
+    <nav class="nav-mobile-links" aria-label="Mobile">
+      <a href="#work" data-nav-link data-mobile>Work</a>
+      <a href="#how" data-nav-link data-mobile>How it works</a>
+      <a href="#aanya" data-nav-link data-mobile>Aanya</a>
+      <a href="#faq" data-nav-link data-mobile>FAQ</a>
+      <a href="#sample" class="btn btn-primary" data-mobile>Get a free sample</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    transition: transform var(--base) var(--ease-out);
+  }
+  .nav.nav-hidden { transform: translateY(-100%); }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    height: 72px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .nav-logo img { height: 24px; width: auto; }
+
+  .nav-links {
+    display: none;
+    gap: var(--sp-4);
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding-bottom: 4px;
+    position: relative;
+    color: var(--chalk);
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: 0;
+    height: 2px;
+    background: var(--chalk);
+    transition: right var(--base) var(--ease-out);
+  }
+  .nav-links a.active::after,
+  .nav-links a:hover::after {
+    right: 0;
+  }
+
+  .nav-cta { display: none; }
+  @media (min-width: 900px) {
+    .nav-links { display: flex; }
+    .nav-cta { display: inline-flex; }
+  }
+  .nav-cta.solid {
+    background: var(--marigold);
+    color: var(--ink);
+    border-color: var(--marigold);
+  }
+  .nav-cta.solid:hover { background: var(--marigold-hover); }
+
+  .nav-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    color: var(--chalk);
+  }
+  @media (min-width: 900px) {
+    .nav-menu-btn { display: none; }
+  }
+
+  .nav-mobile-panel {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: var(--sp-6) var(--side-padding);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform var(--base) var(--ease-out), opacity var(--base) var(--ease-out), visibility var(--base);
+  }
+  .nav-mobile-panel.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  .nav-mobile-close {
+    position: absolute;
+    top: var(--sp-3);
+    right: var(--side-padding);
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    color: var(--chalk);
+  }
+  .nav-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .nav-mobile-links a {
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    color: var(--chalk);
+  }
+  .nav-mobile-links a.btn {
+    margin-top: var(--sp-2);
+    font-family: var(--font-body);
+    font-size: var(--text-button);
+  }
+</style>

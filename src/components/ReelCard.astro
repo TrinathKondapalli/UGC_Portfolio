@@ -1,0 +1,139 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  item: CollectionEntry<'work'>;
+}
+
+const { item } = Astro.props;
+const { title, niche, thumb, loop, instagramUrl } = item.data;
+const hasUrl = Boolean(instagramUrl && instagramUrl.trim().length > 0);
+const Tag = hasUrl ? 'a' : 'div';
+const webm = loop ? loop.replace(/\.mp4$/, '.webm') : undefined;
+---
+<article class="reel-card" data-niche={niche} data-reel-id={item.slug}>
+  <Tag
+    class="reel-media"
+    href={hasUrl ? instagramUrl : undefined}
+    target={hasUrl ? '_blank' : undefined}
+    rel={hasUrl ? 'noopener' : undefined}
+    aria-label={hasUrl ? `Watch ${title} on Instagram` : undefined}
+    tabindex={hasUrl ? undefined : -1}
+  >
+    <span class="reel-tag">{hasUrl ? niche : 'Coming soon'}</span>
+
+    {loop && (
+      <video
+        class="reel-video"
+        muted
+        playsinline
+        loop
+        preload="none"
+        poster={thumb}
+        data-reel-video
+      >
+        <source src={webm} type="video/webm" />
+        <source src={loop} type="video/mp4" />
+      </video>
+    )}
+    <img class="reel-thumb" src={thumb} alt={`${title} — ad still`} loading="lazy" />
+
+    {hasUrl && (
+      <span class="reel-play" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ink)">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </span>
+    )}
+  </Tag>
+  <h3 class="reel-title">{title}</h3>
+  <p class="caption reel-caption">
+    {hasUrl ? 'Concept ad, watch on Instagram' : 'Concept ad, posting soon'}
+  </p>
+</article>
+
+<style>
+  .reel-card {
+    flex: 0 0 auto;
+    width: 220px;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 560px) {
+    .reel-card { width: 250px; }
+  }
+
+  .reel-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--radius-poster);
+    overflow: hidden;
+    background: var(--graphite);
+    text-decoration: none;
+  }
+
+  .reel-thumb,
+  .reel-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .reel-video {
+    opacity: 0;
+    transition: opacity var(--fast) var(--ease-out);
+  }
+  .reel-media.playing .reel-video { opacity: 1; }
+
+  .reel-tag {
+    position: absolute;
+    top: var(--sp-1);
+    left: var(--sp-1);
+    z-index: 2;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    color: var(--chalk);
+    font-size: var(--text-caption);
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: var(--radius-button);
+  }
+
+  .reel-play {
+    position: absolute;
+    bottom: var(--sp-2);
+    right: var(--sp-2);
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--chalk);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(1);
+    transition: transform var(--fast) var(--ease-out);
+  }
+  .reel-media:hover .reel-play,
+  .reel-media:focus-visible .reel-play {
+    transform: scale(1.08);
+  }
+
+  .reel-title {
+    margin-top: var(--sp-2);
+    font-size: var(--text-card);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .reel-caption {
+    margin-top: 4px;
+  }
+
+  .reel-card.highlight .reel-media {
+    outline: 2px solid var(--marigold);
+    outline-offset: 3px;
+  }
+</style>
