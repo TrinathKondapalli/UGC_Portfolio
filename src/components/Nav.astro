@@ -59,7 +59,6 @@
     z-index: 100;
     transition: transform var(--base) var(--ease-out);
   }
-  .nav.nav-hidden { transform: translateY(-120%); }
 
   .nav-inner {
     display: flex;
@@ -229,20 +228,6 @@
   const panel = document.getElementById('nav-mobile-panel');
   const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
   const heroCta = document.getElementById('hero-cta');
-
-  // Hide on scroll down, show on scroll up.
-  let lastY = window.scrollY;
-  window.addEventListener(
-    'scroll',
-    () => {
-      const y = window.scrollY;
-      if (!nav) return;
-      if (y > lastY && y > 120) nav.classList.add('nav-hidden');
-      else nav.classList.remove('nav-hidden');
-      lastY = y;
-    },
-    { passive: true }
-  );
 
   // Nav CTA solid once hero CTA scrolls out of view.
   if (heroCta && navCta) {
