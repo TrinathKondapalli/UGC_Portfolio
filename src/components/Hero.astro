@@ -66,9 +66,14 @@ const lines = ["AI UGC ads for", "Indian D2C brands"];
 
 <style>
   .hero {
-    padding-top: var(--sp-6);
+    padding-top: calc(72px + var(--sp-6));
     padding-bottom: var(--sp-7);
     overflow: hidden;
+  }
+  @media (min-width: 900px) {
+    .hero {
+      padding-top: calc(var(--sp-4) + 64px + var(--sp-6));
+    }
   }
   .hero-inner {
     display: flex;
